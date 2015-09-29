@@ -47,3 +47,4 @@ User.find({}).remove(function() {
     }
   );
 });
+

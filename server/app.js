@@ -32,6 +32,8 @@ require('./config/socketio')(socketio);
 require('./config/express')(app);
 require('./routes')(app);
 
+var yahooFinance = require('yahoo-finance');
+
 // Start server
 server.listen(config.port, config.ip, function () {
   console.log('Express server listening on %d, in %s mode', config.port, app.get('env'));
@@ -39,3 +41,14 @@ server.listen(config.port, config.ip, function () {
 
 // Expose app
 exports = module.exports = app;
+
+
+// testing yahoofinance
+yahooFinance.historical({
+  symbol: 'AAPL',
+  from: '2015-01-01',
+  to: '2015-08-31',
+  period: 'd'  // 'd' (daily), 'w' (weekly), 'm' (monthly), 'v' (dividends only)
+}, function (err, quotes) {
+  console.log(quotes);
+});
