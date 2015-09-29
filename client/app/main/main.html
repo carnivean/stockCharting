@@ -3,9 +3,8 @@
   <div class="row">
     <div class="col-lg-12">
       <h3>
-        Scope.stocks:
-        {{stocks}}
-        {{newStock}}
+        <p ng-repeat="stock in stocks">{{stock.symbol}}</p>
+        {{startDate | date:'yyyy-MM-dd'}}
       </h3>
       <canvas id="line" class="chart chart-line" chart-data="data"
               chart-labels="labels" chart-legend="true" chart-series="series"

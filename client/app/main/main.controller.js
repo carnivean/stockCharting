@@ -18,6 +18,10 @@ angular.module('stockchartingApp')
     // init
     $scope.newStock = '';
 
+    // standard value for startDate is 3 months ago
+    $scope.today = new Date();
+    $scope.startDate = new Date().setDate($scope.today.getDate() - 90);
+
     // one var for the apicalls, so we dont have to declare it ten times
     var apiString;
 
@@ -26,19 +30,20 @@ angular.module('stockchartingApp')
       apiString = '/api/stocks'
       $http.get(apiString)
         .success(function(data) {
-            console.log(data);
 
-            // reset the array
-            $scope.stocks = [];
-            for (var index = 0; index < data.length; index++) {
-              $scope.stocks.push(data[index].symbol);
-            }
+            // repopulate the array
+            $scope.stocks = data;
 
             socket.syncUpdates('stocks', $scope.stocks);
         })
         .error(function(data){
             console.log('Error: ' + data);
         })
+    };
+
+    // get the data for a single stocksymbol, the parameter
+    var getStockData = function(stock){
+
     };
 
     // function to add the stock to the colletion
