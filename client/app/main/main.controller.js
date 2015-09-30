@@ -63,7 +63,9 @@ angular.module('stockchartingApp')
 
             getQuotesForStocks();
 
-            socket.syncUpdates('stocks', $scope.stocks);
+            socket.syncUpdates('stocks', $scope.stocks, function() {
+              getQuotesForStocks();
+            });
         })
         .error(function(data){
             console.log('Error: ' + data);
