@@ -32,3 +32,13 @@
 .navbar-text {
     margin-left: 15px;
 }
+
+.date-selector {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.active {
+  background-color: black;
+  color: white;
+}
