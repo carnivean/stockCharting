@@ -74,7 +74,8 @@ angular.module('stockchartingApp')
 
     // get the data for a single stocksymbol, the parameter
     var getStockData = function(stock){
-      var apiString = 'https://www.quandl.com/api/v3/datasets/YAHOO/' + stock + '.json?start_date=' + dateString;
+      var apiString = 'https://www.quandl.com/api/v3/datasets/YAHOO/' + stock + '.json?start_date=' + dateString +
+        '&api_key=4Ptwv9qePjn8xMizVLek';
       $http.get(apiString)
         .success(function(data) {
           console.log(data);
@@ -86,6 +87,7 @@ angular.module('stockchartingApp')
                 stockIndex = index;
             }
           }
+
           console.log('stockIndex' + stockIndex + ' ' +  data.dataset.dataset_code);
           $scope.series[stockIndex] = data.dataset.name;
           $scope.data[stockIndex] = [];
@@ -97,6 +99,17 @@ angular.module('stockchartingApp')
           }
         })
         .error(function(data){
+          console.log('Error: ' + data);
+        });
+    };
+
+    $scope.deleteStock = function (id) {
+      var apiString = '/api/stocks/' + id;
+      $http.delete(apiString)
+        .success (function(data) {
+          console.log('deleted record!');
+      })
+        .error(function(data) {
           console.log('Error: ' + data);
         });
     };
