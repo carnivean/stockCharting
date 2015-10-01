@@ -94,8 +94,8 @@ angular.module('stockchartingApp')
           $scope.labels = [];
 
           for (var i = 0; i < data.dataset.data.length; i++) {
-              $scope.data[stockIndex][i] = data.dataset.data[i][3];
               $scope.labels[i] = data.dataset.data[i][0]
+              $scope.data[stockIndex][i] = data.dataset.data[i][3];
           }
         })
         .error(function(data){
@@ -128,6 +128,15 @@ angular.module('stockchartingApp')
     $scope.onClick = function (points, evt) {
       console.log(points, evt);
     };
+
+    $scope.colours = [{ // default
+      "fillColor": "rgba(224, 108, 112, 1)",
+      "strokeColor": "rgba(207,100,103,1)",
+      "pointColor": "rgba(220,220,220,1)",
+      "pointStrokeColor": "#fff",
+      "pointHighlightFill": "#fff",
+      "pointHighlightStroke": "rgba(151,187,205,0.8)"
+    }];
 
     // call the functions for the initial values
     getDates();
