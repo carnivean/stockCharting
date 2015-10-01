@@ -36,9 +36,18 @@
 .date-selector {
   margin-top: 20px;
   margin-bottom: 20px;
+  background: #777;
+  color: #eee;
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+  cursor: pointer;
+}
+
+.date-selector:hover {
+  background-color: #555;
 }
 
 .active {
-  background-color: black;
-  color: white;
+  background-color: #333;
+  color: #eee;
 }
