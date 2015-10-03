@@ -119,8 +119,6 @@ angular.module('stockchartingApp')
         '&api_key=4Ptwv9qePjn8xMizVLek';
       $http.get(apiString)
         .success(function(data) {
-          console.log(data);
-
           var stockIndex = -1;
           // find the right index
           for (var index = 0; index < $scope.stocks.length && stockIndex < 0; index++) {
@@ -138,19 +136,36 @@ angular.module('stockchartingApp')
               $scope.nvddata[stockIndex].values.push([Number(new Date(data.dataset.data[i][0])), data.dataset.data[i][3]]);
           }
           succStocks++;
-          console.log(succStocks);
           if (succStocks === numberOfStocks) {
             $scope.nvdapi.update();
           }
 
         })
-        .error(function(data){
-          console.log('Error: ' + data);
+        .error(function(data, status, headers, config, statusText){
+          if (status == 404) {
+            var url = config.url.substring(45);
+            url = url.substring(0, url.indexOf('.'));
+            deleteByName(url);
+          }
+
           succStocks++;
           if (succStocks === numberOfStocks) {
             $scope.nvdapi.update();
           }
         });
+    };
+
+    var deleteByName = function(str) {
+      var stockIndex = -1;
+      // find the right index
+      for (var index = 0; index < $scope.stocks.length && stockIndex < 0; index++) {
+          if ($scope.stocks[index].symbol === str) {
+              stockIndex = index;
+          }
+      }
+      if (stockIndex > -1) {
+        $scope.deleteStock($scope.stocks[stockIndex]._id);
+      }
     };
 
     $scope.deleteStock = function (id) {
