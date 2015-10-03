@@ -18,7 +18,7 @@ angular.module('stockchartingApp')
     $scope.nvddata = [];
     $scope.nvdoptions = {
       chart: {
-        type: "lineChart",
+        type: 'lineChart',
         height: 450,
         margin : {
           top: 20,
@@ -38,7 +38,7 @@ angular.module('stockchartingApp')
         xAxis: {
           axisLabel: 'Date',
           tickFormat: function(d) {
-            return d3.time.format('%m/%d/%y')(new Date(d))
+            return d3.time.format('%m/%d/%y')(new Date(d));
           },
           showMaxMin: false,
           staggerLabels: true
