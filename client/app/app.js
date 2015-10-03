@@ -7,7 +7,8 @@ angular.module('stockchartingApp', [
   'ngRoute',
   'btford.socket-io',
   'ui.bootstrap',
-  'chart.js'
+  'chart.js',
+  'nvd3'
 ])
   .config(function ($routeProvider, $locationProvider, $httpProvider) {
     $routeProvider

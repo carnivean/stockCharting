@@ -18,10 +18,18 @@
         </div>
       </div>
 
+
+      <!--
       <canvas id="line" class="chart chart-line" chart-data="data"
               chart-labels="labels" chart-legend="true" chart-series="series"
-              chart-click="onClick" chart-colours="colours">
-      </canvas>
+              chart-click="onClick">
+      </canvas>-->
+
+      <nvd3 options="nvdoptions" data="nvddata"  api="nvdapi">
+
+      </nvd3>
+
+      {{nvddata}}
 
       <form class="thing-form">
         <label>Syncs in realtime across clients</label>

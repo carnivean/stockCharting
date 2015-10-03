@@ -15,6 +15,48 @@ angular.module('stockchartingApp')
     $scope.series = [];
     $scope.data = [];
 
+    var numberOfStocks;
+    var succStocks;
+
+    $scope.nvddata = [];
+    $scope.nvdoptions = {
+      chart: {
+        type: 'cumulativeLineChart',
+        height: 450,
+        margin : {
+          top: 20,
+          right: 20,
+          bottom: 60,
+          left: 65
+        },
+        x: function(d){ return d[0]; },
+        y: function(d){ return d[1]/100; },
+        average: function(d) { return d.mean/100; },
+
+        color: d3.scale.category10().range(),
+        transitionDuration: 300,
+        useInteractiveGuideline: true,
+        clipVoronoi: false,
+
+        xAxis: {
+          axisLabel: 'X Axis',
+          tickFormat: function(d) {
+            return d3.time.format('%m/%d/%y')(new Date(d))
+          },
+          showMaxMin: false,
+          staggerLabels: true
+        },
+
+        yAxis: {
+          axisLabel: 'Y Axis',
+          tickFormat: function(d){
+            return d3.format(',.1%')(d);
+          },
+          axisLabelDistance: 20
+        }
+      }
+    };
+
     // init
     $scope.newStock = '';
 
@@ -47,7 +89,9 @@ angular.module('stockchartingApp')
 
     // get the stock data for all stocks
     var getQuotesForStocks = function() {
-      for (var index = 0; index < $scope.stocks.length; index++) {
+      numberOfStocks = $scope.stocks.length;
+      succStocks = 0;
+      for (var index = 0; index < numberOfStocks; index++) {
         getStockData($scope.stocks[index].symbol);
       }
     };
@@ -88,18 +132,34 @@ angular.module('stockchartingApp')
             }
           }
 
-          console.log('stockIndex' + stockIndex + ' ' +  data.dataset.dataset_code);
+          console.log('stockIndex ' + stockIndex + ' ' +  data.dataset.dataset_code);
           $scope.series[stockIndex] = data.dataset.name;
           $scope.data[stockIndex] = [];
           $scope.labels = [];
 
+          $scope.nvddata[stockIndex] = {};
+          $scope.nvddata[stockIndex].key = data.dataset.dataset_code;
+          $scope.nvddata[stockIndex].values = [];
+
           for (var i = 0; i < data.dataset.data.length; i++) {
-              $scope.labels[i] = data.dataset.data[i][0]
+              $scope.labels[i] = data.dataset.data[i][0];
               $scope.data[stockIndex][i] = data.dataset.data[i][3];
+
+              $scope.nvddata[stockIndex].values.push([Number(new Date(data.dataset.data[i][0])), data.dataset.data[i][3]]);
           }
+          succStocks++;
+          console.log(succStocks);
+          if (succStocks === numberOfStocks) {
+            $scope.nvdapi.update();
+          }
+
         })
         .error(function(data){
           console.log('Error: ' + data);
+          succStocks++;
+          if (succStocks === numberOfStocks) {
+            $scope.nvdapi.update();
+          }
         });
     };
 
@@ -107,7 +167,7 @@ angular.module('stockchartingApp')
       var apiString = '/api/stocks/' + id;
       $http.delete(apiString)
         .success (function(data) {
-          console.log('deleted record!');
+          console.log('deleted record!', data);
       })
         .error(function(data) {
           console.log('Error: ' + data);
@@ -129,14 +189,6 @@ angular.module('stockchartingApp')
       console.log(points, evt);
     };
 
-    $scope.colours = [{ // default
-      "fillColor": "rgba(224, 108, 112, 1)",
-      "strokeColor": "rgba(207,100,103,1)",
-      "pointColor": "rgba(220,220,220,1)",
-      "pointStrokeColor": "#fff",
-      "pointHighlightFill": "#fff",
-      "pointHighlightStroke": "rgba(151,187,205,0.8)"
-    }];
 
     // call the functions for the initial values
     getDates();
