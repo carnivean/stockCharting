@@ -11,17 +11,14 @@ angular.module('stockchartingApp')
     // array with all the stocks, we want to check
     $scope.stocks = [];
 
-    $scope.labels = [];
-    $scope.series = [];
-    $scope.data = [];
-
+    // only update the chart, after all calls were successful
     var numberOfStocks;
     var succStocks;
 
     $scope.nvddata = [];
     $scope.nvdoptions = {
       chart: {
-        type: 'cumulativeLineChart',
+        type: "lineChart",
         height: 450,
         margin : {
           top: 20,
@@ -30,7 +27,7 @@ angular.module('stockchartingApp')
           left: 65
         },
         x: function(d){ return d[0]; },
-        y: function(d){ return d[1]/100; },
+        y: function(d){ return d[1]; },
         average: function(d) { return d.mean/100; },
 
         color: d3.scale.category10().range(),
@@ -39,7 +36,7 @@ angular.module('stockchartingApp')
         clipVoronoi: false,
 
         xAxis: {
-          axisLabel: 'X Axis',
+          axisLabel: 'Date',
           tickFormat: function(d) {
             return d3.time.format('%m/%d/%y')(new Date(d))
           },
@@ -48,9 +45,9 @@ angular.module('stockchartingApp')
         },
 
         yAxis: {
-          axisLabel: 'Y Axis',
+          axisLabel: 'Stock Value',
           tickFormat: function(d){
-            return d3.format(',.1%')(d);
+            return '$' + d3.format(',.1f')(d);
           },
           axisLabelDistance: 20
         }
@@ -132,18 +129,11 @@ angular.module('stockchartingApp')
             }
           }
 
-          console.log('stockIndex ' + stockIndex + ' ' +  data.dataset.dataset_code);
-          $scope.series[stockIndex] = data.dataset.name;
-          $scope.data[stockIndex] = [];
-          $scope.labels = [];
-
           $scope.nvddata[stockIndex] = {};
           $scope.nvddata[stockIndex].key = data.dataset.dataset_code;
           $scope.nvddata[stockIndex].values = [];
 
-          for (var i = 0; i < data.dataset.data.length; i++) {
-              $scope.labels[i] = data.dataset.data[i][0];
-              $scope.data[stockIndex][i] = data.dataset.data[i][3];
+          for (var i = data.dataset.data.length - 1; i >= 0; i--) {
 
               $scope.nvddata[stockIndex].values.push([Number(new Date(data.dataset.data[i][0])), data.dataset.data[i][3]]);
           }
